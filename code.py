@@ -24,6 +24,7 @@ device = I2CDevice(i2c, 0x20)
 kbd = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(kbd)
 cc = ConsumerControl(usb_hid.devices)
+mode = 0; # Initial state 0 animation 1 on all lights 2 all lights turn of
 def colourwheel(pos):
     if pos < 0 or pos > 255:
         return (0, 0, 0)
@@ -178,16 +179,29 @@ while True:
             held[14] = 1
             
     elif pressed[15]:
-        pixels[15] = colourwheel(15 * 16)  # Map pixel index to 0-255 range
+        pixels[15] = (255, 255, 255)  # Mode selector
 
         if not held[15]:
-            layout.write("mpc toggle")
-            kbd.send(Keycode.ENTER)
+            if mode == 0:
+                mode = 1;
+            elif mode == 1:
+                mode = 2
+            else:
+                mode = 0
             held[15] = 1
     
     else:  # Released state
         for i in range(16):
             # Turn pixels off
-            pixels[i] = colourwheel(i * 16)
+            if mode == 0:
+                 pixels[i] = colourwheel(i * 16)
+                 time.sleep(0.1)
+                 if i == 15:
+                     mode = 1;
+            elif mode == 1:
+                pixels[i] = colourwheel(i * 16)
+            else:
+                 pixels[i] = (0, 0, 0)
             held[i] = 0  # Set held states to off
         time.sleep(0.1) # Debounce
+
