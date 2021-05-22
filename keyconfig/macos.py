@@ -116,6 +116,16 @@ class MacosKeypad():
                 self.setKeyColour(key, colours[key][0])
 
     def handleEvent(self, index, event):
+        if event & EVENT_KEY_DOWN:
+            if index == 4:
+                self.incrementVolume()
+            elif index == 5:
+                self.decrementVolume()
+            elif index == 6:
+                self.incrementBrightness()
+            elif index == 7:
+                self.decrementBrightness()
+                
         if event & EVENT_SINGLE_PRESS:
             if index == 0:
                 self.openZoomApp()
@@ -125,10 +135,6 @@ class MacosKeypad():
                 self.openTerminal()
             elif index == 3:
                 self.openCalendarApp()
-            elif index == 4:
-                self.incrementVolume()
-            elif index == 5:
-                self.decrementVolume()
             elif index == 6:
                 self.incrementBrightness()
             elif index == 7:

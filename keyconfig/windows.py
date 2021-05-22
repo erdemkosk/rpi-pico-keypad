@@ -1,8 +1,66 @@
 import time
+import usb_hid
 from constants import *
 from adafruit_hid.keycode import Keycode
+from adafruit_hid.consumer_control import ConsumerControl
+from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 class WindowsKeypad():
+    
+    def openVisualStudioCodeApp(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("VISUAL")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+    
+    def openSteamApp(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("STEAM")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+        
+    def openEpicStoreApp(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("EPIC")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+        
+    def openWeModeApp(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("WEM")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+        
+    def openOpera(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("OPERA")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+        
+    def openTorrentApp(self):
+        self.keyboard.send(Keycode.ALT, Keycode.SPACE)
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboardLayout.write("QBIT")
+        time.sleep(KEYBOARD_DELAY)
+        self.keyboard.send(Keycode.ENTER)
+        
+    def closeAll(self):
+        self.keyboard.send(Keycode.ALT, Keycode.F4)
+        time.sleep(KEYBOARD_DELAY)
+        
+    def incrementVolume(self):
+        self.cc.send(ConsumerControlCode.VOLUME_INCREMENT)
+        
+    def decrementVolume(self):
+        self.cc.send(ConsumerControlCode.VOLUME_DECREMENT)
+        
+    def muteVolume(self):
+        self.cc.send(ConsumerControlCode.MUTE)
 
     def windowsIntro(self, frame):
         if frame >= 4:
@@ -14,9 +72,9 @@ class WindowsKeypad():
     #--- REQUIRED METHODS ---
     IMAGE = [
         COLOUR_DARK_VIOLET, COLOUR_DARK_VIOLET, COLOUR_DARK_VIOLET, COLOUR_DARK_VIOLET,
-        COLOUR_DARK_YELLOW, COLOUR_DARK_YELLOW, COLOUR_DARK_VIOLET, COLOUR_DARK_VIOLET,
-        COLOUR_DARK_BLUE, COLOUR_WHITE, COLOUR_DARK_YELLOW, COLOUR_WHITE,
-        COLOUR_WHITE, COLOUR_WHITE, COLOUR_WHITE, COLOUR_DARK_YELLOW
+        COLOUR_BLUE, COLOUR_GREEN, COLOUR_DARK_VIOLET, COLOUR_DARK_VIOLET,
+        COLOUR_DARK_YELLOW, COLOUR_DARK_YELLOW, COLOUR_RED, COLOUR_RED,
+        COLOUR_RED, COLOUR_RED, COLOUR_RED, COLOUR_RED
     ]
 
     def loop(self):
@@ -37,6 +95,7 @@ class WindowsKeypad():
         self.setKeyColour = setKeyColour
         self.keyboard = keyboard
         self.keyboardLayout = keyboardLayout
+        self.cc = ConsumerControl(usb_hid.devices)
 
     def introduce(self):
         self.resetColours(COLOUR_OFF)
@@ -53,8 +112,28 @@ class WindowsKeypad():
                 self.setKeyColour(key, colours[key][0])
 
     def handleEvent(self, index, event):
+        if event & EVENT_KEY_DOWN:
+            if index == 8:
+                self.incrementVolume()
+            elif index == 9:
+                self.decrementVolume()
+                
         if event & EVENT_SINGLE_PRESS:
-            if index == 0:
-                print("test")
+            if index == 4:
+                self.muteVolume()
+            if index == 5:
+                self.closeAll()
+            if index == 10:
+                self.openSteamApp()
+            if index == 11:
+                self.openEpicStoreApp()
+            if index == 12:
+                self.openOpera()
+            if index == 13:
+                self.openTorrentApp()
+            if index == 14:
+                self.openWeModeApp()
+            if index == 15:
+                self.openVisualStudioCodeApp()
                 
     #------------------------
