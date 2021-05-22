@@ -18,13 +18,13 @@ from constants import *
 from keypad import *
 from keyconfig.macos import *
 from keyconfig.windows import *
-from keyconfig.teams import *
+from keyconfig.colorsoff import *
 #------------------------------------
 for _ in range(10):
     print(" ")
 print("  ============ NEW EXECUTION ============  ")
 #------------------------------------
-interfaces = [ MacosKeypad ,WindowsKeypad, TeamsKeypad ]
+interfaces = [ MacosKeypad ,WindowsKeypad, ColorsOffKeypad ]
 currentInterface = -1
 #------------------------------------
 
