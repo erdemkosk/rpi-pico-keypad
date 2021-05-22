@@ -1,27 +1,49 @@
-# SPDX-FileCopyrightText: 2016 Damien P. George
-# SPDX-FileCopyrightText: 2017 Ladyada for Adafruit Industries
-# SPDX-FileCopyrightText: 2017 Scott Shawcroft for Adafruit Industries
-# SPDX-FileCopyrightText: 2019 Roy Hooper
+# The MIT License (MIT)
 #
-# SPDX-License-Identifier: MIT
+# Copyright (c) 2016 Damien P. George (original Neopixel object)
+# Copyright (c) 2017 Ladyada
+# Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+# Copyright (c) 2019 Roy Hooper
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 
 """
 `adafruit_dotstar` - DotStar strip driver (for CircuitPython 5.0+ with _pixelbuf)
 =================================================================================
 
-* Author(s): Damien P. George, Limor Fried, Scott Shawcroft & Rose Hooper
+* Author(s): Damien P. George, Limor Fried, Scott Shawcroft & Roy Hooper
 """
 
 # pylint: disable=ungrouped-imports
+import sys
 import busio
 import digitalio
 
-try:
-    import _pixelbuf
-except ImportError:
+if sys.implementation.version[0] < 5:
     import adafruit_pypixelbuf as _pixelbuf
+else:
+    try:
+        import _pixelbuf
+    except ImportError:
+        import adafruit_pypixelbuf as _pixelbuf
 
-__version__ = "2.0.3"
+__version__ = "2.0.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_DotStar.git"
 
 START_HEADER_SIZE = 4
