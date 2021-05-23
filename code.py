@@ -24,8 +24,9 @@ for _ in range(10):
     print(" ")
 print("  ============ NEW EXECUTION ============  ")
 #------------------------------------
-interfaces = [ MacosKeypad ,WindowsKeypad, ColorsOffKeypad ]
+interfaces = [ MacosKeypad ,WindowsKeypad ]
 currentInterface = -1
+isDarkModeEnabled = False
 #------------------------------------
 
 # CS  : GP17 - 22
@@ -62,6 +63,28 @@ def swapLayout():
     currentInterface = (currentInterface + 1) % len(interfaces)
     currentKeypadConfiguration = interfaces[currentInterface](kbd, layout, setKeyColour)
     currentKeypadConfiguration.introduce()
+    
+def swapColorsOff():
+    global currentKeypadConfiguration
+    global currentInterface
+    global isDarkModeEnabled
+    
+    if isDarkModeEnabled:
+        isDarkModeEnabled = False
+        currentKeypadConfiguration = interfaces[currentInterface](kbd, layout, setKeyColour)
+    else:
+        isDarkModeEnabled = True
+        currentKeypadConfiguration = ColorsOffKeypad(kbd, layout, setKeyColour)
+        
+    currentKeypadConfiguration.introduce()
+    
+def swapInitialState():
+    global currentKeypadConfiguration
+    global currentInterface
+    
+    currentInterface = 0
+    currentKeypadConfiguration = KeypadInterface(kbd, layout, setKeyColour)
+    currentKeypadConfiguration.introduce()
 
 def read_button_states(x, y):
     pressed = [0] * BUTTON_COUNT
@@ -94,7 +117,13 @@ while True:
     for keyIndex in range(BUTTON_COUNT):
         event = checkButton(keyIndex, pressed[keyIndex], keypadButtonStates, checkHeldForFlash)
         if event & EVENT_DOUBLE_PRESS:
+             if keyIndex == 0:
+                  swapColorsOff()
+                  
              if keyIndex == 15:
                   swapLayout()
+        if event & EVENT_LONG_PRESS:
+             if keyIndex == 0:
+                  swapInitialState()
        
         currentKeypadConfiguration.handleEvent(keyIndex, event)
